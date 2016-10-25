@@ -19,17 +19,19 @@ loop do
   puts "Sending response."
   
   def diagnostics(request_lines)
-    first_heading = request_lines.first.split
-    second_heading = request_lines[1].split(":").map(&:strip)
+    verb_path_protocol_heading = request_lines.first.split
+    host_heading = request_lines[1].split(":").map(&:strip)
+    host_heading = request_lines[1].split(":").map{|line| line.strip}
+    
     accept_heading = request_lines[6].split
     [
       "<pre>", 
-      "Verb: #{first_heading[0]}",
-      "Path: #{first_heading[1]}",
-      "Protocol: #{first_heading[2]}",
-      "Host: #{second_heading[1]}",
-      "Port: #{second_heading[2]}",
-      "Origin: #{second_heading[1]}",
+      "Verb: #{verb_path_protocol_heading[0]}",
+      "Path: #{verb_path_protocol_heading[1]}",
+      "Protocol: #{verb_path_protocol_heading[2]}",
+      "Host: #{host_heading[1]}",
+      "Port: #{host_heading[2]}",
+      "Origin: #{host_heading[1]}",
       "Accept: #{accept_heading[1]}",
       "<pre>" 
     ].join("\n")
@@ -61,3 +63,4 @@ loop do
   client.close
   puts "\nResponse complete, exiting."
 end
+
