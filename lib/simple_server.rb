@@ -6,6 +6,7 @@ require './lib/parser'
 
 class SimpleServer
   include PathHandler
+
   attr_reader :server, 
               :loop,
               :hello_hits,
@@ -32,7 +33,7 @@ class SimpleServer
     request = request_lines(client)
     path    = path(request)
 
-    path_content_loader(client, path, hello_hits, total_hits)
+    path_content_loader(client, request)
     client.puts diagnosis(request)
     @loop = false if path == "/shutdown"
     client.close
@@ -50,8 +51,9 @@ class SimpleServer
     Parser.new(request).path
   end
 
-  def path_content_loader(client, path, hello_hits, total_hits)
-    client.puts "<html><head></head><body>#{PathHandler.new(path).handle}</body></html>"
+  def path_content_loader(client, request)
+    path = path(request)
+    client.puts "<html><head></head><body>#{handle(path)}</body></html>"
   end   
 
   def diagnosis(request) 

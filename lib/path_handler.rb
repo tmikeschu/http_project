@@ -1,13 +1,7 @@
 require './lib/parser'
 
 module PathHandler
-  attr_reader :path
-
-  def initialize(path = nil)
-    @path = path
-  end
-
-  def handle
+  def handle(path)
     case path
     when "/"
     when "/hello" then "Hello, World! "
