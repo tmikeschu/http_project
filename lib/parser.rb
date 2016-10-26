@@ -1,13 +1,7 @@
-class Parser
+module Parser
   
-  attr_reader :request_lines
-
-  def initialize(request_lines = [])
-    @request_lines = request_lines
-  end
-
   def verb_path_protocol
-    request_lines.find do |line| 
+    @request.find do |line| 
       line.start_with?("GET") || line.start_with?("POST")
     end.split
   end
@@ -25,7 +19,7 @@ class Parser
   end
 
   def host_heading
-    request_lines.find {|line| line.start_with?("Host")}.split
+    @request.find {|line| line.start_with?("Host")}.split
   end
 
   def host 
@@ -46,7 +40,7 @@ class Parser
   end
 
   def accept
-    accept = request_lines.find {|line| line.start_with?("Accept:")}
+    accept = @request.find {|line| line.start_with?("Accept:")}
     if accept
       accept.split[1] 
     else

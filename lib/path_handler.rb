@@ -1,8 +1,9 @@
 require './lib/parser'
 
 module PathHandler
-  def handle(path)
-    path = path.partition("?")
+
+  def handle
+    path = self.path.partition("?")
     case path.first
     when "/"
     when "/hello"

@@ -2,6 +2,8 @@ require 'socket'
 require './lib/diagnostics'
 require './lib/path_handler'
 require './lib/parser'
+require './lib/request_lines'
+
 
 
 class SimpleServer
@@ -33,7 +35,7 @@ class SimpleServer
     # request lines again
     client       = server.accept
     request      = request_lines(client)
-    path         = path(request)
+    path         = request.path
     @total_hits += 1
 
     path_content_loader(client, request)
@@ -43,7 +45,7 @@ class SimpleServer
   end
 
   def request_lines(client)
-    request = []
+    request = RequestLines.new
     while line = client.gets and !line.chomp.empty?
       request << line.chomp
     end
@@ -51,12 +53,10 @@ class SimpleServer
   end
 
   def path(request)
-    Parser.new(request).path
   end
 
   def path_content_loader(client, request)
-    path = path(request)
-    client.puts "<html><head></head><body>#{handle(path)}</body></html>"
+    client.puts "<html><head></head><body>#{request.handle}</body></html>"
   end   
 
   def diagnosis(request) 
