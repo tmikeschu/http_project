@@ -1,7 +1,5 @@
 require 'socket'
-require './lib/diagnostics'
 require './lib/path_handler'
-require './lib/parser'
 require './lib/request_lines'
 
 
@@ -32,11 +30,12 @@ class SimpleServer
   def run_request_response_cycle
     client       = server.accept
     request      = request_lines(client)
-    path         = request.path
-    content      = request.handle
+    @hello_hits += 1 if hello?(request.path)
+    @total_hits += 1
+
+    content      = request.handle(@hello_hits, @total_hits)
     diagnostics  = request.diagnostics 
     body         = []
-    @total_hits += 1
 
     body << content << diagnostics
 
@@ -50,8 +49,16 @@ class SimpleServer
               "content-length: #{output.length}\r\n\r\n"].join("\r\n")
     client.puts headers
     client.puts output
-
+    @loop = false if shutdown?(request.path)
     client.close
+  end
+
+  def hello?(path)
+    path == "/hello"
+  end
+
+  def shutdown?(path)
+    path == "/shutdown"
   end
 
   def request_lines(client)

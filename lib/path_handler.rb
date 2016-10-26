@@ -1,13 +1,11 @@
-require './lib/parser'
-
 module PathHandler
 
-  def handle
+  def handle(hello_hits, total_hits)
     path = self.path.partition("?")
     case path.first
     when "/"
     when "/hello"
-      "Hello, World! (#{@hello_hits += 1})"
+      "Hello, World! (#{hello_hits})"
     when "/datetime" 
       "#{Time.now.strftime('%l:%m%p on %A, %B %e, %Y')}"
     when "/word_search"
@@ -18,8 +16,7 @@ module PathHandler
         "#{word.upcase} is not a known word"
       end
     when "/shutdown"
-      @loop = false
-      "Total Requests: #{@total_hits}"
+      "Total Requests: #{total_hits}"
     end
   end
   

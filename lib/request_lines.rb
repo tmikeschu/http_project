@@ -1,6 +1,6 @@
 require './lib/path_handler'
 require './lib/diagnostics'
-
+require './lib/parser'
 
 class RequestLines
   

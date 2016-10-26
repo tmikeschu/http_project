@@ -6,29 +6,25 @@ require './lib/request_lines'
 class RequestLinesTest < Minitest::Test
 
   def setup
-    @get_lines = [
-      "GET / HTTP/1.1",
-      "Host: localhost:9292",
-      "Connection: keep-alive",
-      "Cache-Control: no-cache",
-      "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36",
-      "Postman-Token: e2095661-c6ca-4ca6-11c6-5feebd9d2bfb",
-      "Accept: */*",
-      "Accept-Encoding: gzip, deflate, sdch, br",
-      "Accept-Language: en-US,en;q=0.8"
-      ]
-    
-    @get_lines_hello = [
-      "GET /hello HTTP/1.1",
-      "Host: localhost:9292",
-      "Connection: keep-alive",
-      "Cache-Control: no-cache",
-      "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36",
-      "Postman-Token: e2095661-c6ca-4ca6-11c6-5feebd9d2bfb",
-      "Accept: */*",
-      "Accept-Encoding: gzip, deflate, sdch, br",
-      "Accept-Language: en-US,en;q=0.8"
-      ]
+    @get_lines = 
+      ["GET / HTTP/1.1",
+       "Host: localhost:9292",
+       "Connection: keep-alive",
+       "Cache-Control: no-cache",
+       "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36",
+       "Postman-Token: e2095661-c6ca-4ca6-11c6-5feebd9d2bfb",
+       "Accept: */*",
+       "Accept-Encoding: gzip, deflate, sdch, br",
+       "Accept-Language: en-US,en;q=0.8"]
+
+    @post_lines = 
+      ["POST /cgi-bin/process.cgi HTTP/1.1", 
+       "User-Agent: Mozilla/4.0 (compatible; MSIE5.01; Windows NT)", 
+       "Host: www.tutorialspoint.com", 
+       "Content-Type: application/x-www-form-urlencoded", 
+       "Content-Length: length", "Accept-Language: en-us", 
+       "Accept-Encoding: gzip, deflate", 
+       "Connection: Keep-Alive"]
   end
 
   def test_it_exists
@@ -70,10 +66,22 @@ class RequestLinesTest < Minitest::Test
     assert_equal "GET", request.verb
   end
 
+  def test_verb_method_returns_a_different_verb
+    request = RequestLines.new
+    request << @post_lines
+    assert_equal "POST", request.verb
+  end
+
   def test_path_method_returns_path
     request = RequestLines.new
     request << @get_lines
     assert_equal "/", request.path
+  end
+
+  def test_path_method_returns_different_path
+    request = RequestLines.new
+    request << @post_lines
+    assert_equal "/cgi-bin/process.cgi", request.path
   end
 
   def test_protocol_method_returns_protocol
@@ -94,16 +102,34 @@ class RequestLinesTest < Minitest::Test
     assert_equal "localhost", request.host
   end
 
+  def test_it_returns_different_host_name
+    request = RequestLines.new
+    request << @post_lines
+    assert_equal "www.tutorialspoint.com", request.host
+  end
+
   def test_it_returns_port_number
     request = RequestLines.new
     request << @get_lines
     assert_equal "9292", request.port
   end
 
+  def test_it_returns_different_port_number
+    request = RequestLines.new
+    request << @post_lines
+    assert_equal "N/A", request.port
+  end
+
   def test_it_returns_origin
     request = RequestLines.new
     request << @get_lines
     assert_equal "localhost", request.origin
+  end
+
+  def test_it_returns_different_origin
+    request = RequestLines.new
+    request << @post_lines
+    assert_equal "www.tutorialspoint.com", request.origin
   end
 
   def test_it_returns_accept_line
@@ -120,12 +146,12 @@ class RequestLinesTest < Minitest::Test
 
   def test_it_handles_hello_path
     request = RequestLines.new
-    request << @get_lines_hello
+    request << "GET /hello HTTP/1.1"
     expected = "Hello, World! (1)"
     assert_equal expected, request.handle
   end
 
-  def test_it_handles_hello_path
+  def test_it_handles_shutdown_path
     request = RequestLines.new
     request << "GET /shutdown HTTP/1.1"
     expected = "Total Requests: "
