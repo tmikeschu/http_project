@@ -22,7 +22,6 @@ loop do
     verb_path_protocol_heading = request_lines.first.split
     host_heading = request_lines[1].split(":").map(&:strip)
     host_heading = request_lines[1].split(":").map{|line| line.strip}
-    
     accept_heading = request_lines[6].split
     [
       "<pre>", 
@@ -33,14 +32,14 @@ loop do
       "Port: #{host_heading[2]}",
       "Origin: #{host_heading[1]}",
       "Accept: #{accept_heading[1]}",
-      "<pre>" 
+      "</pre>" 
     ].join("\n")
   end
   
   case request_lines.first.split[1]
   when "/"
     total_requests += 1
-    client.puts diagnostics(request_lines)
+    client.puts "<html><head></head><body>#{diagnostics(request_lines)}</body></html>"
   when "/hello"
     total_requests += 1
     hello_hits += 1
@@ -50,12 +49,12 @@ loop do
   when "/datetime"
     total_requests += 1
     output = "#{Time.now.strftime('%l:%m%p on %A, %B %e, %Y')}"
-    client.puts output
+    client.puts "<html><head></head><body>#{output}</body></html>"
     client.puts diagnostics(request_lines)
   when "/shutdown"
     total_requests += 1
     output = "Total Requests: #{total_requests}"
-    client.puts output
+    client.puts "<html><head></head><body>#{output}</body></html>"
     client.puts diagnostics(request_lines)
     break
   end

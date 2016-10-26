@@ -1,7 +1,7 @@
 require 'faraday'
 gem 'minitest', '~> 5.2'
 require 'minitest/autorun'
-require "minitest/emoji"
+require "minitest/nyan_cat"
 require './lib/simple_server'
 
 class SimpleServerTest < Minitest::Test

@@ -31,7 +31,7 @@ loop do
       "Port: #{second_heading[2]}",
       "Origin: #{second_heading[1]}",
       "Accept: #{accept_heading[1]}",
-      "<pre>" 
+      "</pre>" 
     ].join("\n")
   end
   output = diagnostics(request_lines)

@@ -12,11 +12,7 @@ loop do
     request_lines << line.chomp
   end
 
-  # puts "Got this request:"
-  # puts request_lines.join("\n")
-
-  puts "Sending response."
-  
+  puts "\nSending response." 
   
   output = "Hello, World! (#{hello_hits += 1})"
   client.puts "<html><head></head><body>#{output}</body></html>"
