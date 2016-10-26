@@ -33,10 +33,24 @@ class SimpleServer
     client       = server.accept
     request      = request_lines(client)
     path         = request.path
+    content      = request.handle
+    diagnostics  = request.diagnostics 
+    body         = []
     @total_hits += 1
 
-    path_content_loader(client, request)
-    client.puts request.diagnostics
+    body << content << diagnostics
+
+    puts "Sending response."
+    response = body.join("\n")
+    output = "<html><head></head><body>#{response}</body></html>"
+    headers = ["http/1.1 200 ok",
+              "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+              "server: ruby",
+              "content-type: text/html; charset=iso-8859-1",
+              "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+    client.puts headers
+    client.puts output
+
     client.close
   end
 
@@ -46,10 +60,6 @@ class SimpleServer
       request << line.chomp
     end
     request
-  end
-
-  def path_content_loader(client, request)
-    client.puts "<html><head></head><body>#{request.handle}</body></html>"
   end   
 
 

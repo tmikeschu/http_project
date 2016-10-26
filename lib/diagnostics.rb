@@ -1,8 +1,7 @@
 module Diagnostics
 
   def diagnostics
-    [
-      "<pre>",
+    ["<pre>",
       "Verb: #{self.verb}",
       "Path: #{self.path}",
       "Protocol: #{self.protocol}",
