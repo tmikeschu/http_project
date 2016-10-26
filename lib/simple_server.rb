@@ -36,8 +36,7 @@ class SimpleServer
     @total_hits += 1
 
     path_content_loader(client, request)
-    client.puts diagnosis(request)
-    # @loop = false if path == "/shutdown"
+    client.puts request.diagnostics
     client.close
   end
 
@@ -49,16 +48,10 @@ class SimpleServer
     request
   end
 
-  def path(request)
-  end
-
   def path_content_loader(client, request)
     client.puts "<html><head></head><body>#{request.handle}</body></html>"
   end   
 
-  def diagnosis(request) 
-    Diagnostics.new(request).diagnosis
-  end
 
 end
 

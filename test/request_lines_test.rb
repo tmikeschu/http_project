@@ -131,7 +131,13 @@ class RequestLinesTest < Minitest::Test
     expected = "Total Requests: "
     assert_equal expected, request.handle
   end
-  
+
+  def test_it_returns_diagnostics
+    request = RequestLines.new
+    request << @get_lines
+    expected = "<pre>\nVerb: GET\nPath: /\nProtocol: HTTP/1.1\nHost: localhost\nPort: 9292\nOrigin: localhost\nAccept: */*\n</pre>"
+    assert_equal expected, request.diagnostics
+  end
   
 
 end

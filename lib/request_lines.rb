@@ -1,8 +1,10 @@
 require './lib/path_handler'
+require './lib/diagnostics'
+
 
 class RequestLines
   
-  include PathHandler, Parser
+  include PathHandler, Parser, Diagnostics
 
   attr_reader :request
 
@@ -14,8 +16,5 @@ class RequestLines
     @request << line
     @request.flatten!
   end
-  
-  
 
-  
 end

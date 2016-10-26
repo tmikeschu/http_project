@@ -22,7 +22,7 @@ module PathHandler
       "Total Requests: #{@total_hits}"
     end
   end
-
+  
   def word(path)
     path[2].partition("=")[2]
   end
