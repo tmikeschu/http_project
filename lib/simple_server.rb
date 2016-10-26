@@ -30,9 +30,6 @@ class SimpleServer
   end
 
   def run_request_response_cycle
-    # something along the lines of make a class wbere request lines is an instance
-    # variable and can pull on all the classes as modules that only instantiate 
-    # request lines again
     client       = server.accept
     request      = request_lines(client)
     path         = request.path
