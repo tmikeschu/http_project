@@ -2,21 +2,32 @@ require './lib/parser'
 
 module PathHandler
   def handle(path)
-    case path
+    path = path.partition("?")
+    case path.first
     when "/"
-    when "/hello" then "Hello, World! "
-    when "/datetime" then "#{Time.now.strftime('%l:%m%p on %A, %B %e, %Y')}"
+    when "/hello"
+      "Hello, World! (#{@hello_hits += 1})"
+    when "/datetime" 
+      "#{Time.now.strftime('%l:%m%p on %A, %B %e, %Y')}"
     when "/word_search"
-      @total_requests += 1
-      word = string_query(request_lines)[2].partition("=")[2]
-      dictionary = File.readlines("/usr/share/dict/words").each(&:strip!)
+      word = word(path)
       if dictionary.include?(word)
-        client.puts "#{word.upcase} is a known word"
+        "#{word.upcase} is a known word"
       else
-        client.puts "#{word.upcase} is not a known word"
+        "#{word.upcase} is not a known word"
       end
-    when "/shutdown" then "Total Requests: "
+    when "/shutdown"
+      @loop = false
+      "Total Requests: #{@total_hits}"
     end
+  end
+
+  def word(path)
+    path[2].partition("=")[2]
+  end
+
+  def dictionary
+    File.readlines("/usr/share/dict/words").each(&:strip!)
   end
 
 end

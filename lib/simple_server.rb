@@ -12,7 +12,6 @@ class SimpleServer
               :hello_hits,
               :total_hits
 
-
   def initialize(port = 9292)
     @server     = TCPServer.new(port)
     @loop       = true
@@ -29,13 +28,14 @@ class SimpleServer
   end
 
   def run_request_response_cycle
-    client  = server.accept
-    request = request_lines(client)
-    path    = path(request)
+    client       = server.accept
+    request      = request_lines(client)
+    path         = path(request)
+    @total_hits += 1
 
     path_content_loader(client, request)
     client.puts diagnosis(request)
-    @loop = false if path == "/shutdown"
+    # @loop = false if path == "/shutdown"
     client.close
   end
 
