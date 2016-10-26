@@ -1,7 +1,7 @@
 require 'socket'
-require './lib/diagnostics'
 require './lib/path_handler'
-require './lib/parser'
+require './lib/request_lines'
+
 
 
 class SimpleServer
@@ -28,50 +28,48 @@ class SimpleServer
   end
 
   def run_request_response_cycle
-    # something along the lines of make a class wbere request lines is an instance
-    # variable and can pull on all the classes as modules that only instantiate 
-    # request lines again
     client       = server.accept
     request      = request_lines(client)
-    path         = path(request)
+    @hello_hits += 1 if hello?(request.path)
     @total_hits += 1
 
-    response = path_content_loader(client, request)
-    diag = diagnosis(request)
-    
+
+    content      = request.handle(@hello_hits, @total_hits)
+    diagnostics  = request.diagnostics 
+    body         = []
+
+    body << content << diagnostics
+
     puts "Sending response."
-    output = "<html><head></head><body><pre>#{response}#{diag}</pre></body></html>"
-    headers = ["HTTP/1.1 200 OK",
+    response = body.join("\n")
+    output = "<html><head></head><body>#{response}</body></html>"
+    headers = ["http/1.1 200 ok",
               "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
               "server: ruby",
               "content-type: text/html; charset=iso-8859-1",
               "content-length: #{output.length}\r\n\r\n"].join("\r\n")
-    client.puts output
     client.puts headers
-
+    client.puts output
+    @loop = false if shutdown?(request.path)
     client.close
   end
 
+  def hello?(path)
+    path == "/hello"
+  end
+
+  def shutdown?(path)
+    path == "/shutdown"
+  end
+
   def request_lines(client)
-    request = []
+    request = RequestLines.new
     while line = client.gets and !line.chomp.empty?
       request << line.chomp
     end
     request
-  end
-
-  def path(request)
-    Parser.new(request).path
-  end
-
-  def path_content_loader(client, request)
-    path = path(request)
-    "#{handle(path)}"
   end   
 
-  def diagnosis(request) 
-    Diagnostics.new(request).diagnosis
-  end
 
 end
 

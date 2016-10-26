@@ -1,22 +1,15 @@
-require './lib/parser'
+module Diagnostics
 
-class Diagnostics
-  attr_reader :parser
-  
-  def initialize(request_lines = [])
-    @parser = Parser.new(request_lines)
-  end
-
-  def diagnosis
-    [
-      "Verb: #{parser.verb}",
-      "Path: #{parser.path}",
-      "Protocol: #{parser.protocol}",
-      "Host: #{parser.host}",
-      "Port: #{parser.port}",
-      "Origin: #{parser.origin}",
-      "Accept: #{parser.accept}"
-    ].join("\n")
+  def diagnostics
+    ["<pre>",
+      "Verb: #{self.verb}",
+      "Path: #{self.path}",
+      "Protocol: #{self.protocol}",
+      "Host: #{self.host}",
+      "Port: #{self.port}",
+      "Origin: #{self.origin}",
+      "Accept: #{self.accept}",
+      "</pre>"].join("\n")
   end
 
 end
