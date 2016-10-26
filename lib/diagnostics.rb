@@ -2,7 +2,7 @@ require './lib/parser'
 
 class Diagnostics
   attr_reader :parser
-
+  
   def initialize(request_lines = [])
     @parser = Parser.new(request_lines)
   end
