@@ -7,7 +7,6 @@ request_lines = []
 while line = client.gets and !line.chomp.empty?
   request_lines << line.chomp
 end
-require 'pry'; binding.pry
 
 puts "Got this request:"
 puts request_lines.inspect

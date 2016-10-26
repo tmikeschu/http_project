@@ -36,9 +36,19 @@ class SimpleServer
     path         = path(request)
     @total_hits += 1
 
-    path_content_loader(client, request)
-    client.puts diagnosis(request)
-    # @loop = false if path == "/shutdown"
+    response = path_content_loader(client, request)
+    diag = diagnosis(request)
+    
+    puts "Sending response."
+    output = "<html><head></head><body><pre>#{response}#{diag}</pre></body></html>"
+    headers = ["HTTP/1.1 200 OK",
+              "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+              "server: ruby",
+              "content-type: text/html; charset=iso-8859-1",
+              "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+    client.puts output
+    client.puts headers
+
     client.close
   end
 
@@ -56,7 +66,7 @@ class SimpleServer
 
   def path_content_loader(client, request)
     path = path(request)
-    client.puts "<html><head></head><body>#{handle(path)}</body></html>"
+    "#{handle(path)}"
   end   
 
   def diagnosis(request) 

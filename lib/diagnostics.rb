@@ -9,15 +9,13 @@ class Diagnostics
 
   def diagnosis
     [
-      "<pre>",
       "Verb: #{parser.verb}",
       "Path: #{parser.path}",
       "Protocol: #{parser.protocol}",
       "Host: #{parser.host}",
       "Port: #{parser.port}",
       "Origin: #{parser.origin}",
-      "Accept: #{parser.accept}",
-      "</pre>"
+      "Accept: #{parser.accept}"
     ].join("\n")
   end
 
