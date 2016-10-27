@@ -15,12 +15,9 @@ class SimpleServer
 
   def initialize(port = 9292)
     @server     = TCPServer.new(port)
-    @request    = nil
-    @client     = nil
     @loop       = true
     @hello_hits = 0
     @total_hits = 0
-    @game
   end
 
   def server_loop
