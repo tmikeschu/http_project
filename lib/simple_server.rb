@@ -30,7 +30,8 @@ class SimpleServer
   def run_request_response_cycle
     client       = server.accept
     request      = request_lines(client)
-    @hello_hits += 1 if hello?(request.path)
+    
+    increment_hello_hits(request.path)
     @total_hits += 1
     body = [content(request),  diagnostics(request)]
 
@@ -57,8 +58,8 @@ class SimpleServer
   end
 
 
-  def hello?(path)
-    path == "/hello"
+  def increment_hello_hits(path)
+    @hello_hits += 1 if path == "/hello"
   end
 
   def shutdown?(path)
