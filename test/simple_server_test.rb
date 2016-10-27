@@ -24,7 +24,6 @@ class SimpleServerTest < Minitest::Test
     assert_equal "Path: /", result
   end
 
-
   def test_it_has_hello_path
     response = Faraday.get("http://localhost:9292/hello")
     result = response.body.split("\n").find{|line| line.start_with?("Path:")}
@@ -42,6 +41,5 @@ class SimpleServerTest < Minitest::Test
     result = response.body.split("\n").find{|line| line.start_with?("Path:")}
     assert_equal "Path: /shutdown", result
   end
-
   
 end
