@@ -27,7 +27,6 @@ class Game
     else
       @guessed = true
       guesses[number] = "correct"
-      "#{number} is correct! Start a new game!" 
     end
   end
 

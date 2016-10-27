@@ -60,7 +60,9 @@ module PathHandler
   def game(game)
     return "Start a game with POST /start_game!" if game.nil?  
     return "Make a guess!" if game.guesses[game.last].nil?
+    return "#{game.last} is correct! Start a new game!" if game.guessed == true
     "Last guess #{"was " + game.last + " and " + game.guesses[game.last]}. Total guesses: #{game.guesses.count}."
+    
   end
 
   def make_guess(path, game)
