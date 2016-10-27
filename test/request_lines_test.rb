@@ -138,24 +138,30 @@ class RequestLinesTest < Minitest::Test
     assert_equal "*/*", request.accept
   end
 
+  def test_it_returns_different_accept_line
+    request = RequestLines.new
+    request << @post_lines
+    assert_equal "N/A", request.accept
+  end
+
   def test_it_handles_home_path
     request = RequestLines.new
     request << @get_lines
-    assert_equal nil, request.handle
+    assert_equal nil, request.handle(0, 1)
   end
 
   def test_it_handles_hello_path
     request = RequestLines.new
     request << "GET /hello HTTP/1.1"
     expected = "Hello, World! (1)"
-    assert_equal expected, request.handle
+    assert_equal expected, request.handle(1, 1)
   end
 
   def test_it_handles_shutdown_path
     request = RequestLines.new
     request << "GET /shutdown HTTP/1.1"
-    expected = "Total Requests: "
-    assert_equal expected, request.handle
+    expected = "Total Requests: 1"
+    assert_equal expected, request.handle(0, 1)
   end
 
   def test_it_returns_diagnostics
