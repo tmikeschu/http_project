@@ -50,13 +50,13 @@ class SimpleServer
   end 
 
   def check_for_content_length
-    content_length = @request.request.find{|line| line.start_with?("Content-Length:")}
+    content_length = @request.request.find{|line| line.start_with?("Content-Length")}
     return if content_length.nil?
-    require 'pry'; binding.pry
+    # require 'pry'; binding.pry
     content_length = content_length.split[1].to_i
     if content_length > 0
-      number = client.read(content_length) 
-      @request.number_guess = number.values.first
+      number = client.read(content_length).split("=")[1].to_i
+      @request.number_guess = number
     end
   end
   
