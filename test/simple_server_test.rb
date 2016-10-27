@@ -37,11 +37,11 @@ class SimpleServerTest < Minitest::Test
     assert_equal "Path: /datetime", result
   end
 
-  def test_it_has_shutdown_path
-    response = Faraday.get("http://localhost:9292/shutdown")
-    result = response.body.split("\n").find{|line| line.start_with?("Path:")}
-    assert_equal "Path: /shutdown", result
-  end
+  # def test_it_has_shutdown_path
+  #   response = Faraday.get("http://localhost:9292/shutdown")
+  #   result = response.body.split("\n").find{|line| line.start_with?("Path:")}
+  #   assert_equal "Path: /shutdown", result
+  # end THIS TEST CAUSES SERVER TO SHUT OFF
 
   
 end
