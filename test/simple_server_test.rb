@@ -43,7 +43,6 @@ class SimpleServerTest < Minitest::Test
   #   result = response.body.split("\n").find{|line| line.start_with?("Path:")}
   #   assert_equal "Path: /shutdown", result
   # end
->>>>>>> dev_modulize
 
   
 end
