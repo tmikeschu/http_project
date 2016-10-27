@@ -41,12 +41,6 @@ module Parser
     return "N/A" if accept.nil?
     accept.split[1]
   end
-
-  def content_length
-    length = @request.find{|line| line.start_with?("Content-Length:")}
-    length = length.split[1].to_i
-    length 
-  end
   
 
 end

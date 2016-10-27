@@ -50,10 +50,14 @@ class SimpleServer
   end 
 
   def check_for_content_length
-    content_length = @request.find{|line| line.start_with?}
+    content_length = @request.request.find{|line| line.start_with?("Content-Length:")}
+    return if content_length.nil?
+    require 'pry'; binding.pry
     content_length = content_length.split[1].to_i
-    number = client.read(content_length) if content_length > 0
-    @request.number_guess = number.values.first
+    if content_length > 0
+      number = client.read(content_length) 
+      @request.number_guess = number.values.first
+    end
   end
   
   def counter_and_switch_update
@@ -64,8 +68,6 @@ class SimpleServer
 
   def check_for_game
     return start_game  if request.verb == "POST" && request.path == "/start_game"
-  #   return game_status if request.verb == "GET"  && request.path == "/game"
-  #   make_guess         if request.verb == "POST" && request.path == "/game"
   end
 
   def start_game
