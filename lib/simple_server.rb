@@ -33,12 +33,11 @@ class SimpleServer
     @hello_hits += 1 if hello?(request.path)
     @total_hits += 1
 
-
-    content      = request.handle(@hello_hits, @total_hits)
+    # content      = request.handle(@hello_hits, @total_hits)
     diagnostics  = request.diagnostics 
     body         = []
 
-    body << content << diagnostics
+    body << content(request) << diagnostics
 
     puts "Sending response."
     response = body.join("\n")
@@ -53,6 +52,10 @@ class SimpleServer
     @loop = false if shutdown?(request.path)
     client.close
   end
+
+  def content(request)
+    request.handle(@hello_hits, @total_hits)
+  end    
 
   def hello?(path)
     path == "/hello"

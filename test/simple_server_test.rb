@@ -6,7 +6,7 @@ require './lib/simple_server'
 
 class SimpleServerTest < Minitest::Test
 
-
+  # --seed 19346
   def test_it_has_200_status
     response = Faraday.get("http://localhost:9292/")
     assert_equal 200, response.status
@@ -37,12 +37,11 @@ class SimpleServerTest < Minitest::Test
     assert_equal "Path: /datetime", result
   end
 
-  # test shuts down server
-  # def test_it_has_shutdown_path
-  #   response = Faraday.get("http://localhost:9292/shutdown")
-  #   result = response.body.split("\n").find{|line| line.start_with?("Path:")}
-  #   assert_equal "Path: /shutdown", result
-  # end
+  def test_it_has_shutdown_path
+    response = Faraday.get("http://localhost:9292/shutdown")
+    result = response.body.split("\n").find{|line| line.start_with?("Path:")}
+    assert_equal "Path: /shutdown", result
+  end
 
   
 end
