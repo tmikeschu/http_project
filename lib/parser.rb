@@ -28,8 +28,8 @@ module Parser
 
   def port
     port = host_heading[1].split(":")[1]
-    return port if port  
-    "N/A" 
+    return "N/A" if port.nil? 
+    port
   end
 
   def origin
@@ -38,8 +38,8 @@ module Parser
 
   def accept
     accept = @request.find {|line| line.start_with?("Accept:")}
-    return accept.split[1] if accept
-    "N/A"
+    return "N/A" if accept.nil?
+    accept.split[1]
   end
     
 
