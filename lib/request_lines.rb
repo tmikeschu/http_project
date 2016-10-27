@@ -13,8 +13,8 @@ class RequestLines
   end
   
   def << (line)
-    @request << line
-    @request.flatten!
+    request << line
+    request.flatten!
   end
 
 end
