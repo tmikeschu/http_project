@@ -1,3 +1,5 @@
+require './lib/game'
+
 module PathHandler
 
   def handle(hello_hits, total_hits)
@@ -37,7 +39,7 @@ module PathHandler
   end
 
   def start_game
-    
+    game = Game.new
     "Good luck!"
   end
 
