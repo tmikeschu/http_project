@@ -8,9 +8,9 @@ class Game
 
   def initialize
     @secret_number = random_number
-    @guesses = {}
-    @guess = nil
-    @guessed = false
+    @guesses       = {}
+    @guessed       = false
+    @guess
   end
 
   def random_number

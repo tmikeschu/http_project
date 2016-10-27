@@ -41,7 +41,5 @@ module Parser
     return "N/A" if accept.nil?
     accept.split[1]
   end
-    
-
 
 end

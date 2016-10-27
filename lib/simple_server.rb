@@ -56,8 +56,6 @@ class SimpleServer
 
   def check_for_game
     return start_game  if request.verb == "POST" && request.path == "/start_game"
-  #   return game_status if request.verb == "GET"  && request.path == "/game"
-  #   make_guess         if request.verb == "POST" && request.path == "/game"
   end
 
   def start_game
