@@ -170,6 +170,13 @@ class RequestLinesTest < Minitest::Test
     expected = "<pre>\nVerb: GET\nPath: /\nProtocol: HTTP/1.1\nHost: localhost\nPort: 9292\nOrigin: localhost\nAccept: */*\n</pre>"
     assert_equal expected, request.diagnostics
   end
+
+  def test_it_handles_start_game_path
+    request = RequestLines.new
+    request << "POST /start_game HTTP/1.1"
+    expected = "Good luck!"
+    assert_equal expected, request.handle(0, 1)
+  end
   
 
 end

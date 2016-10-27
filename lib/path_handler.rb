@@ -7,6 +7,8 @@ module PathHandler
     when "/hello"       then hello +  " (#{hello_hits})"
     when "/datetime"    then datetime
     when "/word_search" then word_search(path)
+    when "/start_game"  then start_game
+    when "/game"        then game
     when "/shutdown"    then shutdown + " #{total_hits}"
     end
   end
@@ -32,6 +34,15 @@ module PathHandler
 
   def dictionary
     File.readlines("/usr/share/dict/words").each(&:strip!)
+  end
+
+  def start_game
+    
+    "Good luck!"
+  end
+
+  def game
+    
   end
 
   def shutdown
