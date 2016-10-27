@@ -34,6 +34,7 @@ class SimpleServer
   def run_request_response_cycle
     @client  = server.accept
     @request = request_lines
+    check_for_content_length
     counter_and_switch_update
     check_for_game
     output_and_header_to_view
@@ -47,6 +48,13 @@ class SimpleServer
     end
     request
   end 
+
+  def check_for_content_length
+    content_length = @request.find{|line| line.start_with?}
+    content_length = content_length.split[1].to_i
+    number = client.read(content_length) if content_length > 0
+    @request.number_guess = number.values.first
+  end
   
   def counter_and_switch_update
     @total_hits += 1

@@ -7,9 +7,11 @@ class RequestLines
   include PathHandler, Parser, Diagnostics
 
   attr_reader :request
+  attr_accessor :number_guess
 
   def initialize
     @request = []
+    @number_guess
   end
   
   def << (line)

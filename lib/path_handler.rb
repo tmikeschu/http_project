@@ -21,7 +21,7 @@ module PathHandler
   def handle_post(request, hello_hits, total_hits, game)
     path    = request.path.partition("?")    
     case path.first
-    when "/start_game"  then start_game(request, game)
+    when "/start_game"  then start_game
     when "/game"        then make_guess(path, game)
     end
   end
@@ -45,7 +45,7 @@ module PathHandler
     path[2].partition("=")[2]
   end
 
-  def number(path)
+  def number(request)
     path[2].partition("=")[2]
   end
 
@@ -53,7 +53,7 @@ module PathHandler
     File.readlines("/usr/share/dict/words").each(&:strip!)
   end
 
-  def start_game(request, game)
+  def start_game
     "Good luck!"
   end
 
@@ -62,12 +62,11 @@ module PathHandler
     return "Make a guess!" if game.guesses[game.last].nil?
     return "#{game.last} is correct! Start a new game!" if game.guessed == true
     "Last guess #{"was " + game.last + " and " + game.guesses[game.last]}. Total guesses: #{game.guesses.count}."
-    
   end
 
   def make_guess(path, game)
     return "Game over. Start a new game!" if game.guessed == true    
-    number = number(path)
+    number = number(request)
     game.guess_number(number)
   end
 
