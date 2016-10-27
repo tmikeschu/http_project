@@ -64,7 +64,7 @@ module PathHandler
     "Last guess #{"was " + game.last + " and " + game.guesses[game.last]}. Total guesses: #{game.guesses.count}."
   end
 
-  def make_guess(path, game)
+  def make_guess(request, game)
     return "Game over. Start a new game!" if game.guessed == true    
     number = number(request)
     game.guess_number(number)
