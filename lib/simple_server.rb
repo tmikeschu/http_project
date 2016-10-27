@@ -1,11 +1,7 @@
 require 'socket'
-require './lib/path_handler'
 require './lib/request_lines'
 
-
-
 class SimpleServer
-  include PathHandler
 
   attr_reader :server, 
               :loop,
@@ -42,20 +38,16 @@ class SimpleServer
     end
     request
   end 
+  
+  def counter_and_switch_update(request)
+    @total_hits += 1
+    @hello_hits += 1     if request.path == "/hello"
+    @loop        = false if request.path == "/shutdown"
+  end
 
   def output_and_header_to_view(client, request)
     client.puts headers(request)
     client.puts output(request)
-  end
-
-  def counter_and_switch_update(request)
-    @total_hits += 1
-    check_for_shut_down(request)
-    check_for_hello(request) 
-  end
-
-  def check_for_shut_down(request)
-    @loop = false if request.path == "/shutdown"
   end
 
   def headers(request)
@@ -85,13 +77,6 @@ class SimpleServer
   def diagnostics(request)
     request.diagnostics
   end
-
-  def check_for_hello(request)
-    @hello_hits += 1 if request.path == "/hello"
-  end
-
-    
-
 
 end
 
