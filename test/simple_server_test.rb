@@ -6,7 +6,7 @@ require './lib/simple_server'
 
 class SimpleServerTest < Minitest::Test
 
-  # --seed 19346
+  # --seed 19346 for making shutdown last
 
   def test_it_has_200_status
     response = Faraday.get("http://localhost:9292/")
@@ -43,20 +43,5 @@ class SimpleServerTest < Minitest::Test
     assert_equal "Path: /shutdown", result
   end
 
-  # def test_it_has_correct_diagnostic
-  #   response = Faraday.get("http://localhost:9292/shutdown")
-  #   expected = 
-  #     ["GET / HTTP/1.1",
-  #      "Host: localhost:9292",
-  #      "Connection: keep-alive",
-  #      "Cache-Control: no-cache",
-  #      "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36",
-  #      "Postman-Token: e2095661-c6ca-4ca6-11c6-5feebd9d2bfb",
-  #      "Accept: */*",
-  #      "Accept-Encoding: gzip, deflate, sdch, br",
-  #      "Accept-Language: en-US,en;q=0.8"]
-  #   result = response.body.split("\n")
-  #   assert_equal expected, result
-  # end
   
 end
