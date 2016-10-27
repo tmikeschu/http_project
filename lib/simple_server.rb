@@ -1,5 +1,7 @@
 require 'socket'
 require './lib/request_lines'
+require './lib/game'
+
 
 class SimpleServer
 
@@ -9,6 +11,7 @@ class SimpleServer
               :loop,
               :hello_hits,
               :total_hits
+  attr_accessor :game
 
   def initialize(port = 9292)
     @server     = TCPServer.new(port)
@@ -17,6 +20,7 @@ class SimpleServer
     @loop       = true
     @hello_hits = 0
     @total_hits = 0
+    @game
   end
 
   def server_loop
@@ -31,6 +35,7 @@ class SimpleServer
     @client  = server.accept
     @request = request_lines
     counter_and_switch_update
+    check_for_game
     output_and_header_to_view
     client.close
   end
@@ -49,17 +54,35 @@ class SimpleServer
     @loop        = false if request.path == "/shutdown"
   end
 
+  def check_for_game
+    return start_game  if request.verb == "POST" && request.path == "/start_game"
+  #   return game_status if request.verb == "GET"  && request.path == "/game"
+  #   make_guess         if request.verb == "POST" && request.path == "/game"
+  end
+
+  def start_game
+    @game = Game.new
+  end
+
   def output_and_header_to_view
     client.puts headers
     client.puts output
   end
 
   def headers
-    ["http/1.1 200 ok",
-    "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-    "server: ruby",
-    "content-type: text/html; charset=iso-8859-1",
-    "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+    if request.verb == "POST" && request.path.start_with?("/game")
+      ["http/1.1 301 Moved Permanently",
+      "Location: http://localhost:9292/game",
+      "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+      "server: ruby",
+      "content-type: text/html; charset=iso-8859-1",].join("\r\n")
+    else
+      ["http/1.1 200 ok",
+      "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+      "server: ruby",
+      "content-type: text/html; charset=iso-8859-1",
+      "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+    end
   end
 
   def output
@@ -75,7 +98,7 @@ class SimpleServer
   end
 
   def content
-    request.handle(hello_hits, total_hits)
+    request.handle(hello_hits, total_hits, game)
   end    
 
   def diagnostics

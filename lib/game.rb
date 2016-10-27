@@ -19,13 +19,15 @@ class Game
   
   def guess_number(number)
     return errors(number) if errors(number)
-    if number < secret_number
+    return "Start a new game!" if @guessed == true
+    if number.to_i < secret_number
       guesses[number] = "too low"
-    elsif number > secret_number
+    elsif number.to_i > secret_number
       guesses[number] = "too high"
     else
+      @guessed = true
       guesses[number] = "correct"
-      guessed = true
+      "#{number} is correct! Start a new game!" 
     end
   end
 
@@ -39,7 +41,7 @@ class Game
   end
 
   def in_range?(number)
-    number.between?(0, 100)
+    number.to_i.between?(0, 100)
   end
 
   def last

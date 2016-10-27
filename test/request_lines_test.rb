@@ -2,6 +2,7 @@ gem 'minitest', '~> 5.2'
 require 'minitest/autorun'
 require "minitest/nyan_cat"
 require './lib/request_lines'
+require './lib/game'
 
 class RequestLinesTest < Minitest::Test
 
@@ -25,6 +26,7 @@ class RequestLinesTest < Minitest::Test
        "Content-Length: length", "Accept-Language: en-us", 
        "Accept-Encoding: gzip, deflate", 
        "Connection: Keep-Alive"]
+    @game = Game.new
   end
 
   def test_it_exists
@@ -147,21 +149,21 @@ class RequestLinesTest < Minitest::Test
   def test_it_handles_home_path
     request = RequestLines.new
     request << @get_lines
-    assert_equal nil, request.handle(0, 1)
+    assert_equal nil, request.handle(0, 1, @game)
   end
 
   def test_it_handles_hello_path
     request = RequestLines.new
     request << "GET /hello HTTP/1.1"
     expected = "Hello, World! (1)"
-    assert_equal expected, request.handle(1, 1)
+    assert_equal expected, request.handle(1, 1, @game)
   end
 
   def test_it_handles_shutdown_path
     request = RequestLines.new
     request << "GET /shutdown HTTP/1.1"
     expected = "Total Requests: 1"
-    assert_equal expected, request.handle(0, 1)
+    assert_equal expected, request.handle(0, 1, @game)
   end
 
   def test_it_returns_diagnostics
@@ -175,8 +177,21 @@ class RequestLinesTest < Minitest::Test
     request = RequestLines.new
     request << "POST /start_game HTTP/1.1"
     expected = "Good luck!"
-    assert_equal expected, request.handle(0, 1)
+    assert_equal expected, request.handle(0, 1, @game)
+  end
+
+  def test_it_handles_post_game_path
+    request = RequestLines.new
+    request << "POST /game?number=1 HTTP/1.1"
+    expected = "too low"
+    assert_equal expected, request.handle(0, 1, @game)
   end
   
+  def test_it_handles_get_game_path
+    request = RequestLines.new
+    request << "GET /game?number=1 HTTP/1.1"
+    expected = "Make a guess!"
+    assert_equal expected, request.handle(0, 1, @game)
+  end
 
 end
