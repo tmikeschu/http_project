@@ -32,9 +32,7 @@ class SimpleServer
     request      = request_lines(client)
     @hello_hits += 1 if hello?(request.path)
     @total_hits += 1
-
-    body         = []
-    body << content(request) << diagnostics(request)
+    body = [content(request),  diagnostics(request)]
 
     puts "Sending response."
     response = body.join("\n")
